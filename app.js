@@ -9,6 +9,7 @@ const pool = require('./service/dbConnection');
 const sessionOptions = require('./service/sessionOptions');
 
 //APP.USE
+app.use(express.static(__dirname + '/public'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -32,6 +33,18 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'login.html'));
   }
 });
+
+const loginCheck = require('./controller/loginCheck');
+app.post('/loginCheck', loginCheck);
+
+const customerShop = require('./controller/customerShop');
+app.get('/customerShop', customerShop);
+
+const categories = require('./controller/categories');
+app.get('/categories/:id', categories);
+
+const addproducts = require('./controller/addproduct');
+app.post('/addproduct', addproducts);
 
 app.get('/logout', (req, res) => {
   req.session.destroy(function (err) {

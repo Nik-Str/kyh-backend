@@ -4,18 +4,39 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>Login</title>
+    <link rel="stylesheet" href="assets/css/login.css" />
   </head>
+
   <body>
-    <h1>Login</h1>
-    <form action="/loginCheck" method="POST">
-      <input name="username" type="text" placeholder="Username" required />
-      <input name="password" type="password" placeholder="Password" required />
-      <button type="submit">Log in</button>
-    </form>
-    <p>Not already registrered?</p>
-    <a href="/signup">
-      <button type="button">Sign up</button>
-    </a>
+    <div class="container">
+      <header>
+        <h1>Login</h1>
+      </header>
+
+      <form action="/loginCheck" method="POST">
+        <div class="row">
+          <label for="Username">Username</label>
+
+          <input type="text" id="Username" name="username" placeholder="Your name.." required />
+        </div>
+
+        <div class="row">
+          <label for="Password">Password</label>
+
+          <input type="password" id="Password" name="password" placeholder="Password" required />
+        </div>
+
+        <div class="row">
+          <button type="submit">Login</button>
+        </div>
+      </form>
+
+      <div class="signup">
+        <label for="Password">Not already registered?</label>
+
+        <a href="/signup">Sign up</a>
+      </div>
+    </div>
   </body>
 </html>

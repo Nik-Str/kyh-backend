@@ -1,13 +1,13 @@
-const query = require('../query');
+const query = require('../service/query');
 
 module.exports = async (req, res) => {
   try {
-    let sql = `SELECT name, password FROM user WHERE name = '${req.body.username}' AND password = '${req.body.password}'`;
+    let sql = `SELECT * FROM user WHERE name = '${req.body.username}' AND password = '${req.body.password}'`;
     const user = await query(sql);
-    console.log(user);
+
     if (user) {
       req.session.loggedIn = true;
-      req.session.userID = user.id;
+      req.session.userId = user[0].id;
       res.status(200).redirect('/');
     }
   } catch (err) {

@@ -11,5 +11,62 @@
     <a href="/logout">
       <button type="button">Logout</button>
     </a>
+
+    <nav id="categories"></nav>
+
+    <section id="products"></section>
+
+    <section id="cart"></section>
+
+    <script>
+      window.onload = async () => {
+        const data = await (await fetch('/customerShop')).json();
+
+        data.data.forEach((item) => {
+          const article = document.createElement('article');
+          article.innerText = item.name;
+
+          article.addEventListener('click', async () => {
+            const products = document.querySelector('#products');
+            products.innerHTML = null;
+
+            const data = await (await fetch(`/categories/${item.name}`)).json();
+
+            data.data.forEach((item) => {
+              const article = document.createElement('article');
+              article.innerText = item.description;
+              article.setAttribute('id', item.id);
+
+              article.addEventListener('click', async function () {
+                fetch('/addproduct', {
+                  method: 'POST',
+                  body: JSON.stringify({ product: this.getAttribute('id') }),
+                }).then((response) => {
+                  if (response.status === 201) {
+                    const cart = document.querySelector('#cart');
+                    const product = cart.querySelector(`[id="${this.id}"]`);
+                    if (!product) {
+                      const article = document.createElement('article');
+                      article.innerText = this.innerText;
+                      article.id = this.id;
+
+                      article.addEventListener('click', function () {
+                        this.parentElement.removeChild(this);
+                        console.log('remove');
+                      });
+
+                      document.querySelector('#cart').appendChild(article);
+                    }
+                  }
+                });
+              });
+
+              products.appendChild(article);
+            });
+          });
+          document.querySelector('#categories').appendChild(article);
+        });
+      };
+    </script>
   </body>
 </html>
