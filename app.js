@@ -6,23 +6,13 @@ const sessions = require('express-session');
 const MySQLStore = require('express-mysql-session')(sessions);
 const path = require('path');
 require('dotenv').config();
-
-//DB CONNECTION DETAILS
-const pool = mysql.createPool({
-  connectionLimit: 10,
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASS,
-  database: process.env.DB_BASE,
-  timezone: 'Z',
-});
+const pool = require('./dbConnection');
 
 //APP.USE
-app.use(express.static('public'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-//SESSION OPTIONS
+// //SESSION OPTIONS
 const options = {
   host: process.env.DB_HOST,
   port: port,
@@ -58,16 +48,22 @@ app.use(
   })
 );
 
+// // PAGES
+app.get('/', (req, res) => {
+  console.log('asasd');
+  if (req.session.loggedId === true) {
+    res.sendFile(path.join(__dirname, 'public', 'shop.html'));
+  } else {
+    res.sendFile(path.join(__dirname, 'public', 'login.html'));
+  }
+});
+
 // LISTEN ON PORT .ENV || 3000
 app.listen(port, () => console.info(`-> Server is listening on port ${port}`));
 
-// PAGES
-app.get('/', (req, res) => {
-  res.sendFile('public/index.html');
-});
+// //API
+const loginCheck = require('./controller/loginCheck');
+app.post('/login', loginCheck);
 
-const loginTest = require('./controller/loginTest');
-app.post('/test', loginTest);
-
-const loginCheck = require('./controller/loginCheckTest');
-app.get('/control', loginCheck);
+// const loginCheck = require('./controller/loginCheckTest');
+// app.get('/control', loginCheck);
