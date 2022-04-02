@@ -10,7 +10,7 @@ module.exports = async (req, res) => {
       req.session.userId = user[0].id;
 
       req.session.save(function (err) {
-        res.status(200).redirect('/shop');
+        res.status(200).redirect('/');
       });
     }
   } catch (err) {

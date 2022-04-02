@@ -28,7 +28,11 @@ app.use(
 // // PAGES
 app.get('/', (req, res) => {
   if (req.session.loggedIn === true) {
-    res.sendFile(path.join(__dirname, 'public', 'shop.html'));
+    if (req.session.userId !== 1) {
+      res.sendFile(path.join(__dirname, 'public', 'shop.html'));
+    } else {
+      res.sendFile(path.join(__dirname, 'public', 'admin.html'));
+    }
   } else {
     res.sendFile(path.join(__dirname, 'public', 'login.html'));
   }
@@ -36,7 +40,11 @@ app.get('/', (req, res) => {
 
 app.get('/shop', (req, res) => {
   if (req.session.loggedIn === true) {
-    res.sendFile(path.join(__dirname, 'public', 'shop.html'));
+    if (req.session.userId !== 1) {
+      res.sendFile(path.join(__dirname, 'public', 'shop.html'));
+    } else {
+      res.sendFile(path.join(__dirname, 'public', 'admin.html'));
+    }
   } else {
     res.sendFile(path.join(__dirname, 'public', 'login.html'));
   }
@@ -62,8 +70,8 @@ app.get('/categories/:id', categories);
 const addproducts = require('./controller/addProduct');
 app.post('/addproduct', addproducts);
 
-const deleteProduct = require('./controller/deleteProduct');
-app.delete('/deleteProduct', deleteProduct);
+const removeProduct = require('./controller/removeProduct');
+app.delete('/removeProduct', removeProduct);
 
 const createUser = require('./controller/createUser');
 app.post('/createUser', createUser);
@@ -73,6 +81,21 @@ app.get('/logout', (req, res) => {
     res.status(200).redirect('/');
   });
 });
+
+const getOrders = require('./controller/getOrders');
+app.get('/getOrders', getOrders);
+
+const getProducts = require('./controller/getProducts');
+app.get('/getProducts', getProducts);
+
+const deleteProduct = require('./controller/deleteProduct');
+app.delete('/deleteProduct', deleteProduct);
+
+const deleteCategories = require('./controller/deleteCategories');
+app.delete('/deleteCategories', deleteCategories);
+
+const createCategory = require('./controller/createCategory');
+app.post('/createCategory', createCategory);
 
 // LISTEN ON PORT .ENV || 3000
 app.listen(port, () => console.info(`-> Server is listening on port ${port}`));

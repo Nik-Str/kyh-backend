@@ -93,7 +93,7 @@
 
         // On click remove item from customer cart
         button.addEventListener('click', function () {
-          fetch('/deleteProduct', {
+          fetch('/removeProduct', {
             method: 'DELETE',
             body: JSON.stringify({ product: id }),
           }).then((response) => {

@@ -5,7 +5,7 @@ module.exports = async (req, res) => {
   const body = await getBody(req);
 
   try {
-    const sql = `DELETE FROM products WHERE products.description = '${body.product}'`;
+    const sql = `DELETE FROM categories WHERE categories.name = '${body.name}'`;
     const data = await query(sql);
 
     if (data) {
