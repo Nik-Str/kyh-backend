@@ -2,7 +2,7 @@ const query = require('../service/query');
 
 module.exports = async (req, res) => {
   try {
-    const sql = `SELECT products.description FROM products JOIN userProducts ON products.id = userProducts.productId WHERE userId = ${req.session.userId}`;
+    const sql = `SELECT products.description, products.id, userProducts.amount FROM products JOIN userProducts ON products.id = userProducts.productId WHERE userId = ${req.session.userId}`;
     const cart = await query(sql);
 
     const sql2 = 'SELECT name FROM categories';
