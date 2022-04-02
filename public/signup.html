@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login</title>
+    <link rel="stylesheet" href="assets/css/login.css" />
+  </head>
+
+  <body>
+    <div class="container">
+      <header>
+        <h1>Sign up</h1>
+      </header>
+
+      <form action="/createUser" method="POST">
+        <div class="row">
+          <label for="Username">Username</label>
+
+          <input type="text" id="Username" name="username" placeholder="Your name.." required />
+        </div>
+
+        <div class="row">
+          <label for="Contact">Contact</label>
+
+          <input type="text" id="Contact" name="contact" placeholder="Contact info" required />
+        </div>
+
+        <div class="row">
+          <label for="Password">Password</label>
+
+          <input type="password" id="Password" name="password" placeholder="Password" required />
+        </div>
+
+        <div class="row">
+          <button type="submit">Sign up</button>
+        </div>
+      </form>
+
+      <div class="signup">
+        <label for="Password">Already registered?</label>
+
+        <a href="/login">Log in</a>
+      </div>
+    </div>
+  </body>
+</html>

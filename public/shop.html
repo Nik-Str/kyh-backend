@@ -1,106 +1,109 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Document</title>
-</head>
+  <body>
+    <h1>Hello World!</h1>
+    <a href="/logout">
+      <button type="button">Logout</button>
+    </a>
 
-<body>
-  <h1>Hello World!</h1>
-  <a href="/logout">
-    <button type="button">Logout</button>
-  </a>
+    <nav id="categories"></nav>
 
-  <nav id="categories"></nav>
+    <section id="products"></section>
 
-  <section id="products"></section>
+    <section id="cart"></section>
 
-  <section id="cart"></section>
+    <script>
+      window.onload = async () => {
+        // Get data with categories and customer cart
+        const data = await (await fetch('/customerShop')).json();
 
-  <script>
-    window.onload = async () => {
-      // Get data with categories and customer cart
-      const data = await (await fetch('/customerShop')).json();
+        //Create menu element for each category
+        console.log(data);
+        data.data.forEach((item) => {
+          const article = document.createElement('article');
+          article.innerText = item.name;
 
-      //Create menu element for each category
-      console.log(data)
-      data.data.forEach((item) => {
-        const article = document.createElement('article');
-        article.innerText = item.name;
+          // On click render all products in category
+          article.addEventListener('click', async () => {
+            const products = document.querySelector('#products');
+            products.innerHTML = null;
 
-        // On click render all products in category
-        article.addEventListener('click', async () => {
-          const products = document.querySelector('#products');
-          products.innerHTML = null;
+            const data = await (await fetch(`/categories/${item.name}`)).json();
 
-          const data = await (await fetch(`/categories/${item.name}`)).json();
+            // Render all products
+            data.data.forEach((item) => {
+              const article = document.createElement('article');
+              article.innerText = item.description;
+              article.setAttribute('id', item.id);
 
-          // Render all products
-          data.data.forEach((item) => {
-            const article = document.createElement('article');
-            article.innerText = item.description;
-            article.setAttribute('id', item.id);
-
-            // On click add item to customer cart
-            article.addEventListener('click', async function () {
-              fetch('/addproduct', {
-                method: 'POST',
-                body: JSON.stringify({
-                  product: this.getAttribute('id')
-                }),
-              }).then((response) => {
-                if (response.status === 201) {
-                  const cart = document.querySelector('#cart');
-                  const product = cart.querySelector(`[id="${this.id}"]`);
-                  // Check if product is already in cart
-                  if (!product) {
-                    addToCart(this.innerText, this.id)
-                  } else {
-                    product.querySelector('span').innerText++
+              // On click add item to customer cart
+              article.addEventListener('click', async function () {
+                fetch('/addproduct', {
+                  method: 'POST',
+                  body: JSON.stringify({
+                    product: this.getAttribute('id'),
+                  }),
+                }).then((response) => {
+                  if (response.status === 201) {
+                    const cart = document.querySelector('#cart');
+                    const product = cart.querySelector(`[id="${this.id}"]`);
+                    // Check if product is already in cart
+                    if (!product) {
+                      addToCart(this.innerText, this.id);
+                    } else {
+                      product.querySelector('span').innerText++;
+                    }
                   }
-                }
+                });
               });
+              products.appendChild(article);
             });
-            products.appendChild(article);
+          });
+          document.querySelector('#categories').appendChild(article);
+        });
+
+        // Render all items in cart
+        // We need to get ID and AMOUNT data
+        data.cart.forEach((item) => {
+          addToCart(item.description, item.id, item.amount);
+        });
+      };
+
+      function addToCart(description, id, amount = 1) {
+        const article = document.createElement('article');
+        article.id = id;
+        article.classList.add('product');
+        const desc = document.createTextNode(description);
+        article.appendChild(desc);
+
+        const span = document.createElement('span');
+        span.innerText = amount;
+        article.appendChild(span);
+
+        const button = document.createElement('button');
+        button.innerText = 'Ta bort vara';
+        article.appendChild(button);
+
+        // On click remove item from customer cart
+        button.addEventListener('click', function () {
+          fetch('/deleteProduct', {
+            method: 'DELETE',
+            body: JSON.stringify({ product: id }),
+          }).then((response) => {
+            if (response.status === 200) {
+              this.parentElement.parentElement.removeChild(this.parentElement);
+            }
           });
         });
-        document.querySelector('#categories').appendChild(article);
-      });
-    
-      // Render all items in cart
-      // We need to get ID and AMOUNT data
-      data.cart.forEach(item => {
-      addToCart(item.description, item.id, item.amount)
-    })
-    
-    };
-
-    function addToCart(description, id, amount = 1) {
-      const article = document.createElement('article');
-      article.id = id;
-      article.classList.add('product')      
-      const desc = document.createTextNode(description)
-      article.appendChild(desc)
-      
-      const span = document.createElement('span')
-      span.innerText = amount
-      article.appendChild(span)
-
-      const button = document.createElement('button')
-      button.innerText = "Ta bort vara"
-      article.appendChild(button)
-
-      // On click remove item from customer cart
-      button.addEventListener('click', function () {
-        this.parentElement.parentElement.removeChild(this.parentElement);
-        console.log('remove');
-      });
-      document.querySelector('#cart').appendChild(article);
-    }
-  </script>
-</body>
-
+        document.querySelector('#cart').appendChild(article);
+      }
+    </script>
+  </body>
 </html>

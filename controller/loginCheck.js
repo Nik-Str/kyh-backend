@@ -8,7 +8,10 @@ module.exports = async (req, res) => {
     if (user) {
       req.session.loggedIn = true;
       req.session.userId = user[0].id;
-      res.status(200).redirect('/');
+
+      req.session.save(function (err) {
+        res.status(200).redirect('/shop');
+      });
     }
   } catch (err) {
     console.log(err);

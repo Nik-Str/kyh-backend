@@ -34,6 +34,22 @@ app.get('/', (req, res) => {
   }
 });
 
+app.get('/shop', (req, res) => {
+  if (req.session.loggedIn === true) {
+    res.sendFile(path.join(__dirname, 'public', 'shop.html'));
+  } else {
+    res.sendFile(path.join(__dirname, 'public', 'login.html'));
+  }
+});
+
+app.get('/login', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'login.html'));
+});
+
+app.get('/signup', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'signup.html'));
+});
+
 const loginCheck = require('./controller/loginCheck');
 app.post('/loginCheck', loginCheck);
 
@@ -43,8 +59,14 @@ app.get('/customerShop', customerShop);
 const categories = require('./controller/categories');
 app.get('/categories/:id', categories);
 
-const addproducts = require('./controller/addproduct');
+const addproducts = require('./controller/addProduct');
 app.post('/addproduct', addproducts);
+
+const deleteProduct = require('./controller/deleteProduct');
+app.delete('/deleteProduct', deleteProduct);
+
+const createUser = require('./controller/createUser');
+app.post('/createUser', createUser);
 
 app.get('/logout', (req, res) => {
   req.session.destroy(function (err) {
