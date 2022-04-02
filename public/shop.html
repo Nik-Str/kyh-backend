@@ -5,20 +5,33 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
+    <link rel="stylesheet" href="./assets/css/shop.css">
   </head>
 
   <body>
-    <h1>Hello World!</h1>
-    <a href="/logout">
-      <button type="button">Logout</button>
-    </a>
+    
+    <div class="menu">
+      
+    </div>
 
-    <nav id="categories"></nav>
+    <div class="wraper">
+       <div class="panel">
+         <h1>Kategorier</h1>
+         <nav id="categories"></nav>
+         <a class="logout" href="/logout">Logout</a>
 
-    <section id="products"></section>
+         <h2>Kundkorg</h2>
+         <section id="cart"></section>
+       </div>
 
-    <section id="cart"></section>
+       <div class="container">
+         <section id="products"></section>
+       </div>
+    </div>
+    
 
+   
+    
     <script>
       window.onload = async () => {
         // Get data with categories and customer cart
@@ -42,6 +55,10 @@
               const article = document.createElement('article');
               article.innerText = item.description;
               article.setAttribute('id', item.id);
+
+              const img = document.createElement('img');
+              img.setAttribute('src', './assets/img/shop.svg');
+              article.appendChild(img);
 
               // On click add item to customer cart
               article.addEventListener('click', async function () {
@@ -87,7 +104,7 @@
         span.innerText = amount;
         article.appendChild(span);
 
-        const button = document.createElement('button');
+        const button = document.createElement('a');
         button.innerText = 'Ta bort vara';
         article.appendChild(button);
 
