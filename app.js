@@ -97,5 +97,14 @@ app.delete('/deleteCategories', deleteCategories);
 const createCategory = require('./controller/createCategory');
 app.post('/createCategory', createCategory);
 
+const editCategory = require('./controller/editCategory');
+app.put('/editCategory', editCategory);
+
+const editProduct = require('./controller/editProduct');
+app.put('/editProduct', editProduct);
+
+const addNewProduct = require('./controller/addNewProduct');
+app.post('/addNewProduct', addNewProduct);
+
 // LISTEN ON PORT .ENV || 3000
 app.listen(port, () => console.info(`-> Server is listening on port ${port}`));

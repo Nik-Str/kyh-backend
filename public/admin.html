@@ -5,6 +5,12 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
+
+    <style>
+      .noDisplay {
+        display: none;
+      }
+    </style>
   </head>
   <body>
     <h1>Admin</h1>
@@ -20,7 +26,7 @@
     <section id="output"></section>
 
     <section>
-      <form id="editForm">
+      <form id="editForm" class="noDisplay">
         <h2></h2>
         <input type="text" />
         <button type="button">Submit</button>
@@ -60,12 +66,13 @@
       });
 
       //Categories and Products
-      const products = document.querySelector('#products');
+      const productsSection = document.querySelector('#products');
 
-      products.addEventListener('click', async () => {
+      productsSection.addEventListener('click', async () => {
         output.innerText = null;
         form.querySelector('p').innerText = null;
         formValue.value = null;
+        form.classList.add('noDisplay');
 
         const btnAddCategory = document.createElement('button');
         btnAddCategory.innerText = 'Add catergory';
@@ -74,6 +81,7 @@
 
         btnAddCategory.addEventListener('click', () => {
           form.querySelector('h2').innerText = 'Add category';
+          form.classList.remove('noDisplay');
 
           form.querySelector('button').onclick = async () => {
             if (formValue.value) {
@@ -82,7 +90,9 @@
                 body: JSON.stringify({ category: formValue.value }),
               }).then((response) => {
                 if (response.status === 201) {
-                  products.click();
+                  productsSection.click();
+                } else if (response.status === 409) {
+                  form.querySelector('p').innerText = 'Categori finns redan!';
                 }
               });
             } else {
@@ -119,12 +129,58 @@
               }
             });
           });
-
+          //Category edit btn
           const btnEdit = document.createElement('button');
+          btnEdit.addEventListener('click', async () => {
+            form.querySelector('h2').innerText = 'Edit category name';
+            form.classList.remove('noDisplay');
+
+            formValue.value = name;
+
+            form.querySelector('button').onclick = async () => {
+              if (formValue.value) {
+                fetch('/editCategory', {
+                  method: 'PUT',
+                  body: JSON.stringify({ newCategory: formValue.value, oldCategory: name }),
+                }).then((response) => {
+                  if (response.status === 201) {
+                    productsSection.click();
+                  } else if (response.status === 409) {
+                    form.querySelector('p').innerText = 'Categori finns redan!';
+                  }
+                });
+              } else {
+                form.querySelector('p').innerText = 'Fältet kan ej vara tomt!';
+              }
+            };
+          });
+
           btnEdit.innerText = 'Edit';
 
           const btnAdd = document.createElement('button');
           btnAdd.innerText = 'Add product';
+
+          btnAdd.addEventListener('click', async () => {
+            form.querySelector('h2').innerText = `Add product to ${ul.id}`;
+            form.classList.remove('noDisplay');
+
+            form.querySelector('button').onclick = async () => {
+              if (formValue.value) {
+                fetch('/addNewProduct', {
+                  method: 'POST',
+                  body: JSON.stringify({ newProduct: formValue.value, category: ul.id }),
+                }).then((response) => {
+                  if (response.status === 201) {
+                    productsSection.click();
+                  } else if (response.status === 409) {
+                    form.querySelector('p').innerText = 'Produkten finns redan!';
+                  }
+                });
+              } else {
+                form.querySelector('p').innerText = 'Fältet kan ej vara tomt!';
+              }
+            };
+          });
 
           h2.append(btnRemove, btnEdit, btnAdd);
 
@@ -149,8 +205,33 @@
               });
             });
 
+            //product edit btn
             const btnEdit = document.createElement('button');
             btnEdit.innerText = 'Edit';
+
+            btnEdit.addEventListener('click', async () => {
+              form.querySelector('h2').innerText = 'Edit product name';
+              form.classList.remove('noDisplay');
+
+              formValue.value = li.id;
+
+              form.querySelector('button').onclick = async () => {
+                if (formValue.value) {
+                  fetch('/editProduct', {
+                    method: 'PUT',
+                    body: JSON.stringify({ oldProduct: li.id, newProduct: formValue.value, category: ul.id }),
+                  }).then((response) => {
+                    if (response.status === 201) {
+                      productsSection.click();
+                    } else if (response.status === 409) {
+                      form.querySelector('p').innerText = 'Produkten finns redan!';
+                    }
+                  });
+                } else {
+                  form.querySelector('p').innerText = 'Fältet kan ej vara tomt!';
+                }
+              };
+            });
 
             li.append(btnRemove, btnEdit);
             ul.append(li);

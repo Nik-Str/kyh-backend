@@ -5,7 +5,7 @@ module.exports = async (req, res) => {
   const body = await getBody(req);
 
   try {
-    const sql = `INSERT INTO categories SET name = '${body.category}'`;
+    const sql = `UPDATE categories SET name = '${body.newCategory}' WHERE name = '${body.oldCategory}'`;
     const data = await query(sql);
 
     if (data) {

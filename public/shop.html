@@ -5,40 +5,33 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-    <link rel="stylesheet" href="./assets/css/shop.css">
+    <link rel="stylesheet" href="./assets/css/shop.css" />
   </head>
 
   <body>
-    
-    <div class="menu">
-      
-    </div>
+    <div class="menu"></div>
 
     <div class="wraper">
-       <div class="panel">
-         <h1>Kategorier</h1>
-         <nav id="categories"></nav>
-         <a class="logout" href="/logout">Logout</a>
+      <div class="panel">
+        <h1>Kategorier</h1>
+        <nav id="categories"></nav>
+        <a class="logout" href="/logout">Logout</a>
 
-         <h2>Kundkorg</h2>
-         <section id="cart"></section>
-       </div>
+        <h2>Kundkorg</h2>
+        <section id="cart"></section>
+      </div>
 
-       <div class="container">
-         <section id="products"></section>
-       </div>
+      <div class="container">
+        <section id="products"></section>
+      </div>
     </div>
-    
 
-   
-    
     <script>
       window.onload = async () => {
         // Get data with categories and customer cart
         const data = await (await fetch('/customerShop')).json();
 
         //Create menu element for each category
-        console.log(data);
         data.data.forEach((item) => {
           const article = document.createElement('article');
           article.innerText = item.name;
