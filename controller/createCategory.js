@@ -5,11 +5,11 @@ module.exports = async (req, res) => {
   const body = await getBody(req);
 
   try {
-    const sql = `DELETE FROM products WHERE products.description = '${body.product}'`;
+    const sql = `INSERT INTO categories SET name = '${body.category}'`;
     const data = await query(sql);
 
     if (data) {
-      res.status(200).end();
+      res.status(201).end();
     }
   } catch (err) {
     console.log(err);

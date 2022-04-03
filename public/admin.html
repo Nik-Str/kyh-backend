@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h1>Admin</h1>
+    <a href="/logout">
+      <button type="button">Logout</button>
+    </a>
+
+    <nav>
+      <button id="customers">Customers</button>
+      <button id="products">Products</button>
+    </nav>
+
+    <section id="output"></section>
+
+    <section>
+      <form id="editForm">
+        <h2></h2>
+        <input type="text" />
+        <button type="button">Submit</button>
+        <p></p>
+      </form>
+    </section>
+
+    <script>
+      const output = document.querySelector('#output');
+      const form = document.querySelector('#editForm');
+      const formValue = form.querySelector('input');
+
+      //Customer
+      document.querySelector('#customers').addEventListener('click', async () => {
+        output.innerText = null;
+
+        // Get object with categories and customer cart
+        const object = await (await fetch('/getOrders')).json();
+        for (const key in object.data) {
+          const element = object.data[key];
+
+          const h2 = document.createElement('h2');
+          h2.innerText = key;
+
+          const ul = document.createElement('ul');
+          ul.id = key;
+          for (const key in element) {
+            const amount = element[key];
+
+            const li = document.createElement('li');
+            li.innerText = key + ' ' + amount;
+            ul.appendChild(li);
+          }
+          output.appendChild(h2);
+          output.appendChild(ul);
+        }
+      });
+
+      //Categories and Products
+      const products = document.querySelector('#products');
+
+      products.addEventListener('click', async () => {
+        output.innerText = null;
+        form.querySelector('p').innerText = null;
+        formValue.value = null;
+
+        const btnAddCategory = document.createElement('button');
+        btnAddCategory.innerText = 'Add catergory';
+
+        output.append(btnAddCategory);
+
+        btnAddCategory.addEventListener('click', () => {
+          form.querySelector('h2').innerText = 'Add category';
+
+          form.querySelector('button').onclick = async () => {
+            if (formValue.value) {
+              fetch('/createCategory', {
+                method: 'POST',
+                body: JSON.stringify({ category: formValue.value }),
+              }).then((response) => {
+                if (response.status === 201) {
+                  products.click();
+                }
+              });
+            } else {
+              form.querySelector('p').innerText = 'Fältet kan ej vara tomt!';
+            }
+          };
+        });
+
+        // Get object with product and categorie
+        const data = await (await fetch('/getProducts')).json();
+
+        const categories = data.data;
+
+        for (const name in categories) {
+          const products = categories[name];
+
+          const h2 = document.createElement('h2');
+          h2.innerText = name;
+
+          const ul = document.createElement('ul');
+          ul.id = name;
+
+          const btnRemove = document.createElement('button');
+          btnRemove.innerText = 'Remove';
+
+          btnRemove.addEventListener('click', async () => {
+            fetch('/deleteCategories', {
+              method: 'DELETE',
+              body: JSON.stringify({ name: ul.id }),
+            }).then((response) => {
+              if (response.status === 200) {
+                btnRemove.parentElement.parentElement.removeChild(btnRemove.parentElement.nextSibling);
+                btnRemove.parentElement.parentElement.removeChild(btnRemove.parentElement);
+              }
+            });
+          });
+
+          const btnEdit = document.createElement('button');
+          btnEdit.innerText = 'Edit';
+
+          const btnAdd = document.createElement('button');
+          btnAdd.innerText = 'Add product';
+
+          h2.append(btnRemove, btnEdit, btnAdd);
+
+          products.forEach((product) => {
+            if (!product) return;
+
+            const li = document.createElement('li');
+            li.innerText = product;
+            li.id = product;
+
+            const btnRemove = document.createElement('button');
+            btnRemove.innerText = 'Remove';
+
+            btnRemove.addEventListener('click', async () => {
+              fetch('/deleteProduct', {
+                method: 'DELETE',
+                body: JSON.stringify({ product: li.id }),
+              }).then((response) => {
+                if (response.status === 200) {
+                  btnRemove.parentElement.parentElement.removeChild(btnRemove.parentElement);
+                }
+              });
+            });
+
+            const btnEdit = document.createElement('button');
+            btnEdit.innerText = 'Edit';
+
+            li.append(btnRemove, btnEdit);
+            ul.append(li);
+          });
+          output.appendChild(h2);
+          output.appendChild(ul);
+        }
+      });
+    </script>
+  </body>
+</html>
