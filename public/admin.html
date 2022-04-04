@@ -5,34 +5,43 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-
-    <style>
-      .noDisplay {
-        display: none;
-      }
-    </style>
+    <link rel="stylesheet" href="assets/css/admin.css">
   </head>
   <body>
-    <h1>Admin</h1>
-    <a href="/logout">
-      <button type="button">Logout</button>
-    </a>
 
-    <nav>
-      <button id="customers">Customers</button>
-      <button id="products">Products</button>
-    </nav>
+    <div class="wraper">
+      <div class="panel">
+        <h1>Admin</h1>
 
-    <section id="output"></section>
+        <nav>
+          <button id="customers">Customers</button>
+          <button id="products">Products</button>
+          <button id="btnAddCategory">Add catergory</button>
+        </nav>
+        
+        <div id="addCat">
 
-    <section>
-      <form id="editForm" class="noDisplay">
-        <h2></h2>
-        <input type="text" />
-        <button type="button">Submit</button>
-        <p></p>
-      </form>
-    </section>
+          <section class="editForm">
+            <form id="editForm" class="noDisplay">
+              <h2></h2>
+              <input type="text" />
+              <button type="button">Submit</button>
+              <p></p>
+            </form>
+          </section>
+
+        </div>
+        
+        
+        <a class="logout" href="/logout">Logout</a>
+      </div>
+
+      <div class="container">
+        <section id="output"></section>
+      </div>
+    </div>
+
+    
 
     <script>
       const output = document.querySelector('#output');
@@ -42,17 +51,21 @@
       //Customer
       document.querySelector('#customers').addEventListener('click', async () => {
         output.innerText = null;
+        form.classList.add('noDisplay');
 
         // Get object with categories and customer cart
         const object = await (await fetch('/getOrders')).json();
         for (const key in object.data) {
           const element = object.data[key];
 
+          const wrapper = document.createElement('div');
+          
           const h2 = document.createElement('h2');
           h2.innerText = key;
 
           const ul = document.createElement('ul');
           ul.id = key;
+          
           for (const key in element) {
             const amount = element[key];
 
@@ -60,46 +73,44 @@
             li.innerText = key + ' ' + amount;
             ul.appendChild(li);
           }
-          output.appendChild(h2);
-          output.appendChild(ul);
+          output.appendChild(wrapper);
+          wrapper.appendChild(h2);
+          wrapper.appendChild(ul);
         }
       });
 
       //Categories and Products
       const productsSection = document.querySelector('#products');
+      const navMenu = document.querySelector('#addCat');
+      const btnAddCategory = document.querySelector('#btnAddCategory');
+
+      btnAddCategory.addEventListener('click', () => {
+      form.querySelector('h2').innerText = 'Add category';
+      form.classList.remove('noDisplay');
+
+      form.querySelector('button').onclick = async () => {
+      if (formValue.value) {
+      fetch('/createCategory', {
+      method: 'POST',
+      body: JSON.stringify({ category: formValue.value }),
+      }).then((response) => {
+      if (response.status === 201) {
+      productsSection.click();
+      } else if (response.status === 409) {
+      form.querySelector('p').innerText = 'Categori finns redan!';
+      }
+      });
+      } else {
+      form.querySelector('p').innerText = 'Fältet kan ej vara tomt!';
+      }
+      };
+      });
 
       productsSection.addEventListener('click', async () => {
         output.innerText = null;
         form.querySelector('p').innerText = null;
         formValue.value = null;
         form.classList.add('noDisplay');
-
-        const btnAddCategory = document.createElement('button');
-        btnAddCategory.innerText = 'Add catergory';
-
-        output.append(btnAddCategory);
-
-        btnAddCategory.addEventListener('click', () => {
-          form.querySelector('h2').innerText = 'Add category';
-          form.classList.remove('noDisplay');
-
-          form.querySelector('button').onclick = async () => {
-            if (formValue.value) {
-              fetch('/createCategory', {
-                method: 'POST',
-                body: JSON.stringify({ category: formValue.value }),
-              }).then((response) => {
-                if (response.status === 201) {
-                  productsSection.click();
-                } else if (response.status === 409) {
-                  form.querySelector('p').innerText = 'Categori finns redan!';
-                }
-              });
-            } else {
-              form.querySelector('p').innerText = 'Fältet kan ej vara tomt!';
-            }
-          };
-        });
 
         // Get object with product and categorie
         const data = await (await fetch('/getProducts')).json();
@@ -108,6 +119,8 @@
 
         for (const name in categories) {
           const products = categories[name];
+
+          const wrapper = document.createElement('div');
 
           const h2 = document.createElement('h2');
           h2.innerText = name;
@@ -236,8 +249,9 @@
             li.append(btnRemove, btnEdit);
             ul.append(li);
           });
-          output.appendChild(h2);
-          output.appendChild(ul);
+          output.appendChild(wrapper);
+          wrapper.appendChild(h2);
+          wrapper.appendChild(ul);
         }
       });
     </script>

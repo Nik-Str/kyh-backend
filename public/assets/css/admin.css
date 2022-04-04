@@ -1,0 +1,268 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+
+    background: linear-gradient(270deg, #4e97c3, #009bff);
+    background-size: 400% 400%;
+    animation: backgroundGradient 9s ease infinite;
+    overflow: hidden;
+    letter-spacing: 0.08em;
+    margin: 0;
+}
+
+nav {
+    display: flex;
+    gap: 1em;
+    margin: 0 0.5em;
+}
+
+.wraper {
+    gap: 2em;
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: row;
+    align-items: flex-start;
+    margin-right: 2em;
+}
+
+@keyframes backgroundGradient {
+    0%{background-position:0% 51%}
+    50%{background-position:100% 50%}
+    100%{background-position:0% 51%}
+}
+
+.menu {
+    position: fixed;
+    top:0;
+    background-color:rgb(255, 255, 255);
+    height: 4em;
+    width: 100%;
+    z-index: 1;
+}
+
+.panel {
+    position: relative;
+    background-color: #fff;
+    height: 100vh;
+    width: 30vw;
+    min-width: 300px;
+    max-width: 400px;
+    box-shadow: 0 0 3em rgba(0, 0, 0, 0.387);
+}
+
+.panel h1, .panel h2 {
+    font-weight: 600;
+    font-size: 1.4rem;
+    text-align: center;
+}
+
+.panel h2 {
+    margin: 5em 0 2em 0;
+}
+
+#cart {
+    display: flex;
+    gap: 2em;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: center;
+}
+
+#addCat {
+    margin: 0 0.5em;
+}
+
+#cart a {
+    padding: 0.5em 1em;
+    margin-left: 2em;
+}
+
+#products article {
+    min-height: 12em;
+    width: 15em;
+    background-color: #fff;
+    padding: 2em;
+    border-radius: 0.3em;
+    box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.387);
+    font-weight: 600;
+    line-height: 1.2rem;
+}
+
+#products article img {
+    width:100%;
+    padding: 1em 0;
+}
+
+#products article:hover {
+    box-shadow: 0 0 0.5em rgba(255, 255, 255, 0.387);
+    cursor: pointer;
+}
+
+input {
+    width: 100%;
+    max-width: 20em;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 0.4em;
+}
+
+label {
+    padding: 12px 12px 12px 0;
+    font-weight: 600;
+}
+
+#categories {
+    display:flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    gap: 1em 0;
+    margin-left: 1em;
+}
+
+#categories article{
+    font-size: 1.3rem;
+    font-weight: 600;
+
+}
+
+#categories article:hover{
+    cursor: pointer;
+
+    color: #04AA6D;
+}
+
+.logout{
+    position: absolute;
+    bottom: 0;
+    right: 1em;
+    background-color: #04AA6D;
+    color: white;
+    padding: 1em 0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    text-decoration: none;
+    text-align: center;
+    width: 100%;
+    margin-bottom: 1em;
+}
+
+button {
+    background-color: #04AA6D;
+    color: white;
+    padding: 1em 0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    text-decoration: none;
+    text-align: center;
+    width: 100%;
+    margin-bottom: 1em;
+}
+
+button:hover {
+    background-color: #45a049;
+    box-shadow: 0 0 1em rgba(0, 0, 0, 0.387);
+}
+
+.container {
+    margin: 2em auto;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 2em;
+    border-radius: 0.3em;
+    padding: 1em;
+    overflow: hidden;
+    width: 100%;
+    height: calc(100vh - 8em);
+    max-width: 70vw;
+}
+
+#output {
+    display:flex;
+    gap:1em;
+}
+
+#output div{
+    background-color: #fff;
+    height: fit-content;
+    padding: 2em;
+    min-height: 15em;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-content: center;
+    align-items: flex-end;
+    gap: 2em;
+    overflow: hidden;
+    width: 100%;
+    max-width: calc(800px - 4em);
+}
+
+.row {
+    display: flex;
+    align-items: center;
+    gap:2em;
+    justify-content: space-between
+}
+
+.submitButton {
+    display: flex;
+    align-items: center;
+    gap:2em;
+    justify-content: center;
+    align-items: stretch;
+    width: 100%;
+    max-width: 20em;
+}
+
+.signup {
+    display: flex;
+    flex-direction: row;
+    gap: 1em;
+    justify-content: flex-end;
+    align-items: flex-end;
+    align-content: center;
+}
+
+.signup label {
+    font-weight: 600;
+    line-height: 1.5em;
+}
+
+a {
+    background-color: #04AA6D;
+    color: white;
+    padding: 0.5em 0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    text-decoration: none;
+    text-align: center;
+    max-width: 5em;
+    width: 100%;
+    margin-bottom: 0.5em;
+}
+
+a:hover {
+    background-color: #45a049;
+    box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.387);
+}
+
+.noDisplay {
+    display: none;
+}
+
+.editForm {
+    margin: 0 0.5em;
+}
+
+#editForm {
+    align-items: center;
+}

@@ -15,6 +15,6 @@ module.exports = async (req, res) => {
     }
   } catch (err) {
     console.log(err);
-    res.status(500).end();
+    res.status(500).redirect('/login');
   }
 };
