@@ -23,15 +23,23 @@ body {
 }
 
 @keyframes backgroundGradient {
-    0%{background-position:0% 51%}
-    50%{background-position:100% 50%}
-    100%{background-position:0% 51%}
+    0% {
+        background-position: 0% 51%
+    }
+
+    50% {
+        background-position: 100% 50%
+    }
+
+    100% {
+        background-position: 0% 51%
+    }
 }
 
 .menu {
     position: fixed;
-    top:0;
-    background-color:rgb(255, 255, 255);
+    top: 0;
+    background-color: rgb(255, 255, 255);
     height: 4em;
     width: 100%;
     z-index: 1;
@@ -47,7 +55,8 @@ body {
     box-shadow: 0 0 3em rgba(0, 0, 0, 0.387);
 }
 
-.panel h1, .panel h2 {
+.panel h1,
+.panel h2 {
     font-weight: 600;
     font-size: 1.4rem;
     text-align: center;
@@ -58,16 +67,40 @@ body {
 }
 
 #cart {
+    width: max-content;
     display: flex;
     gap: 2em;
     flex-direction: column;
     flex-wrap: nowrap;
-    align-items: center;
+    align-items: end;
+    margin: auto;
 }
 
-#cart a {
+#cart .product a {
     padding: 0.5em 1em;
-    margin-left: 2em;
+    box-sizing: content-box;
+    margin: unset;
+    white-space: nowrap;
+    max-width: unset;
+    width: max-content;
+}
+
+#cart .product {
+    align-items: center;
+    display: flex;
+    justify-content: end;
+    width: max-content;
+    gap: 0.5em;
+}
+
+#cart .product span {
+    background-color: lightblue;
+    padding: 0.5em;
+    border-radius: 15%;
+    min-width: 2.5em;
+    height: max-content;
+    display: inline-block;
+    text-align: center;
 }
 
 #products article {
@@ -82,7 +115,7 @@ body {
 }
 
 #products article img {
-    width:100%;
+    width: 100%;
     padding: 1em 0;
 }
 
@@ -105,26 +138,26 @@ label {
 }
 
 #categories {
-    display:flex;
+    display: flex;
     flex-direction: column;
     flex-wrap: wrap;
     gap: 1em 0;
     margin-left: 1em;
 }
 
-#categories article{
+#categories article {
     font-size: 1.3rem;
     font-weight: 600;
 
 }
 
-#categories article:hover{
+#categories article:hover {
     cursor: pointer;
 
     color: #04AA6D;
 }
 
-.logout{
+.logout {
     position: absolute;
     bottom: 0;
     right: 1em;
@@ -187,14 +220,14 @@ form {
 .row {
     display: flex;
     align-items: center;
-    gap:2em;
+    gap: 2em;
     justify-content: space-between
 }
 
 .submitButton {
     display: flex;
     align-items: center;
-    gap:2em;
+    gap: 2em;
     justify-content: center;
     align-items: stretch;
     width: 100%;
